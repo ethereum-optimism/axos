@@ -23,11 +23,7 @@
 
 **Portable no-std Derivation Pipeline engineered in pure Rust** https://github.com/refcell/axos/labels/alpha
 
-<p align="center">
-  <img src="./etc/logo.png">
-</p>
-
-<!-- ![](./etc/banner.png) -->
+![](./etc/banner.png)
 
 **[Install](#usage)**
 | [User Docs](#what-is-axos)
