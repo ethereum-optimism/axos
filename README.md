@@ -21,9 +21,13 @@
 [Docs-rs]: https://docs.rs/axos/
 [Docs]: https://img.shields.io/docsrs/axos.svg?color=319e8c&label=docs.rs
 
-**Portable no-std Derivation Pipeline engineered in pure Rust** https://github.com/refcell/axos/labels/stable
+**Portable no-std Derivation Pipeline engineered in pure Rust** https://github.com/refcell/axos/labels/alpha
 
-![](./etc/banner.png)
+<p align="center">
+  <img width="460" height="300" src="./etc/banner.png">
+</p>
+
+<!-- ![](./etc/banner.png) -->
 
 **[Install](#usage)**
 | [User Docs](#what-is-axos)
