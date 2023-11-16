@@ -1,7 +1,7 @@
 [workspace]
 resolver = "2"
 members = ["bins/*", "crates/*"]
-# default-members = ["crates/axos"]
+default-members = ["crates/axos"]
 
 [profile.dev]
 opt-level = 1

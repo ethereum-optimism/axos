@@ -1,4 +1,4 @@
-# alloy-primitives
+# axos-primitives
 
 Primitive Optimism types in Rust.
 
