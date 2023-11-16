@@ -1,0 +1,12 @@
+[package]
+name = "axos"
+description = "Example usage of the axos derivation pipeline."
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+authors = ["refcell"]
+repository = "https://github.com/refcell/axos"
+homepage = "https://github.com/refcell/axos"
+
+[dependencies]
+axos-primitives = { path = "../../crates/primitives" }

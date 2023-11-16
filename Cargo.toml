@@ -1,0 +1,11 @@
+[workspace]
+resolver = "2"
+members = ["bins/*", "crates/*"]
+# default-members = ["crates/axos"]
+
+[profile.dev]
+opt-level = 1
+overflow-checks = false
+
+[profile.bench]
+debug = true

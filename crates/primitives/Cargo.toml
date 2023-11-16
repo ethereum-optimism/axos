@@ -1,0 +1,15 @@
+[package]
+name = "axos-primitives"
+description = "Primitives for the axos derivation pipeline."
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+authors = ["refcell"]
+repository = "https://github.com/refcell/axos"
+homepage = "https://github.com/refcell/axos"
+exclude = ["**/target", "benches/", "tests"]
+
+[dependencies]
+serde = { version = "1.0", default-features = false, features = ["derive", "alloc"] }
+serde_json = { version = "1.0", default-features = false, features = ["alloc"] }
+alloy-primitives = { version = "0.4.2", default-features = false, features = ["hex-compat", "serde"] }
