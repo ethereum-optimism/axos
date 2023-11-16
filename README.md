@@ -24,7 +24,7 @@
 **Portable no-std Derivation Pipeline engineered in pure Rust** https://github.com/refcell/axos/labels/alpha
 
 <p align="center">
-  <img width="460" height="300" src="./etc/banner.png">
+  <img src="./etc/logo.png">
 </p>
 
 <!-- ![](./etc/banner.png) -->
