@@ -1,5 +1,5 @@
 [package]
-name = "axos"
+name = "axt"
 description = "Example usage of the axos derivation pipeline."
 version = "0.1.0"
 edition = "2021"
