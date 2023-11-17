@@ -1,8 +1,10 @@
 use alloy_primitives::B256;
+#[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
 /// Block Header Info
-#[derive(Debug, Clone, Copy, Eq, PartialEq, Default, Serialize, Deserialize)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(Debug, Clone, Copy, Eq, PartialEq, Default)]
 pub struct BlockInfo {
     /// The block hash
     pub hash: B256,
@@ -27,7 +29,8 @@ impl BlockInfo {
 }
 
 /// L1 epoch block
-#[derive(Copy, Clone, Debug, Default, Serialize, Deserialize, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(Copy, Clone, Debug, Default, PartialEq, Eq)]
 pub struct Epoch {
     /// The block number
     pub number: u64,

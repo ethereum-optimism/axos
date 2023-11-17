@@ -9,4 +9,8 @@ repository = "https://github.com/refcell/axos"
 homepage = "https://github.com/refcell/axos"
 
 [dependencies]
+axos = { path = "../../crates/axos" }
 axos-primitives = { path = "../../crates/primitives" }
+tracing = { version = "0.1", default-features = false, features = ["attributes"] }
+tracing-subscriber = { version = "0.3", default-features = false, features = ["alloc", "env-filter", "tracing-log", "smallvec", "json"] }
+# clap = { version = "4.4", default-features = false, features = [ "color", "help", "usage", "error-context", "suggestions" ] }
