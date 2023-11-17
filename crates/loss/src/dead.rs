@@ -46,7 +46,7 @@ impl DeadSub {
     }
 }
 
-impl tracing::Subscriber for DeadSub {
+impl Subscriber for DeadSub {
     fn enabled(&self, _: &tracing::Metadata<'_>) -> bool {
         false
     }
