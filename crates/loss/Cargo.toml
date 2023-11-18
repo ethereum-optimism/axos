@@ -1,0 +1,24 @@
+[package]
+name = "loss"
+description = "Portable lo-level (no-std) span subscribers for tracing."
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+authors = ["refcell"]
+repository = "https://github.com/refcell/axos"
+homepage = "https://github.com/refcell/axos"
+exclude = ["benches", "tests"]
+
+[features]
+default = ["alloc", "attributes", "env-filter", "json", "smallvec", "tracing-log"]
+alloc = ["tracing-subscriber/alloc"]
+env-filter = ["tracing-subscriber/env-filter"]
+json = ["tracing-subscriber/json"]
+attributes = ["tracing/attributes"]
+tracing-log = ["tracing-subscriber/tracing-log"]
+smallvec = ["tracing-subscriber/smallvec"]
+
+[dependencies]
+anyhow = { version = "1.0", default-features = false, features = [] }
+tracing = { version = "0.1", default-features = false, features = [] }
+tracing-subscriber = { version = "0.3", default-features = false, features = [] }

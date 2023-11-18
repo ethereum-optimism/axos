@@ -26,7 +26,8 @@
 ![](./etc/banner.png)
 
 **[Install](#usage)**
-| [User Docs](#what-is-axos)
+| [Usage](#usage)
+| [Development](#developing)
 | [Crate Docs][crates.io]
 | [Reference][Docs-rs]
 | [Contributing](#contributing)
@@ -45,11 +46,42 @@ Add it to your project with [`cargo add`](https://github.com/rust-lang/cargo/tre
 cargo add axos
 ```
 
+## Developing
+
+To get started locally, make sure to have [`just`][just] installed.
+This will allow you to get up and running by executing the `just`
+command in the root of the `axos` repository. This will run the
+following `Justfile` targets:
+
+- *fmt*: Formats all rust files with [rustfmt][fmt].
+- *clippy*: Lints all targets with [clippy][clippy]. (all features)
+- *tests*: Runs all workspace tests with [nextest][nextest]. (all features)
+
+To run the `axos` derivation pipeline as a binary, there is a convenience
+binary crate `axt`, inside [`./bins/`][bins], that can run `axos` using
+mock data, an offline provider, or with live chain data. _Just_ run `axt`
+in mock provider mode using the `axt` target: `just axt`.
+
+[bins]: ./bins/
+[nextest]: https://github.com/nextest-rs/nextest
+[clippy]: https://github.com/rust-lang/rust-clippy
+[fmt]: https://github.com/rust-lang/rustfmt
+[just]: https://github.com/casey/just
+
 ## Contributing
 
-All contributions are welcome! Experimentation is highly encouraged and new issues are welcome.
+Contributions to `axos` are very welcome and highly appreciated. When
+opening a pull request or issue, please provide concise and descriptive
+detail such that anyone with little context reading your issue or
+reviewing your pull request can easily understand and provide meaningful
+feedback.
 
-## Troubleshooting & Bug Reports
+Before opening a pull request, make sure all tests pass. Execute `just`
+to run the default Justfile target, formating, linting, and testing
+all rust files in the cargo workspace. If the `just` command succeeds
+locally, ci should pass in your pull request.
+
+## Troubleshooting
 
 Please check existing issues for similar bugs or
 [open an issue](https://github.com/refcell/axos/issues/new)
@@ -57,7 +89,4 @@ if no relevant issue already exists.
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE.md).
-Free and open-source, forever.
-*All our rust are belong to you.*
-
+Fully licensed under the [MIT License](LICENSE.md). Open source forever.

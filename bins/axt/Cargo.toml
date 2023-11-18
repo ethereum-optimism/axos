@@ -8,5 +8,19 @@ authors = ["refcell"]
 repository = "https://github.com/refcell/axos"
 homepage = "https://github.com/refcell/axos"
 
+[[bin]]
+bench = false
+path = "src/main.rs"
+name = "axt"
+
 [dependencies]
+# The axt binary uses the standard library for argument parsing with [clap].
+clap = { version = "4.4", features = ["derive"] }
+anyhow = { version = "1.0" }
+# loss = { path = "../../crates/loss" }
+axos = { path = "../../crates/axos" }
 axos-primitives = { path = "../../crates/primitives" }
+axos-providers = { path = "../../crates/providers", features = ["test-utils"] }
+tracing = { version = "0.1" }
+tracing-subscriber = { version = "0.3", features = ["alloc", "env-filter", "json"] }
+serde = { version = "1.0", features = ["derive"] }

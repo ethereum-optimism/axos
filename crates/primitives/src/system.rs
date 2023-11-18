@@ -1,8 +1,10 @@
 use alloy_primitives::{Address, U256};
+#[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
 /// Optimism system config contract values
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct SystemConfig {
     /// Batch sender address
     pub batch_sender: Address,

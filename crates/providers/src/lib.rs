@@ -1,4 +1,7 @@
-#![doc = include_str!("../README.md")]
+//! # Providers
+//!
+//! This crate contains a set of providers for [axos]. Providers are
+//! built in a `no_std` environment.
 #![warn(
     missing_debug_implementations,
     missing_docs,
@@ -12,13 +15,7 @@
 #[cfg(feature = "alloc")]
 extern crate alloc;
 
-/// Re-export [axos_primitives] for convenience.
-pub use axos_primitives::*;
-
-mod config;
-mod info;
-
-#[doc(inline)]
-pub use config::*;
-#[doc(inline)]
-pub use info::*;
+#[cfg(feature = "test-utils")]
+pub mod mock;
+pub mod provider;
+pub mod purple;

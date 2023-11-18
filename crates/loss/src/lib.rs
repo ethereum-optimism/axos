@@ -9,16 +9,7 @@
 #![cfg_attr(docsrs, feature(doc_cfg, doc_auto_cfg))]
 #![no_std]
 
-#[cfg(feature = "alloc")]
-extern crate alloc;
+// #[cfg(feature = "alloc")]
+// extern crate alloc;
 
-/// Re-export [axos_primitives] for convenience.
-pub use axos_primitives::*;
-
-mod config;
-mod info;
-
-#[doc(inline)]
-pub use config::*;
-#[doc(inline)]
-pub use info::*;
+pub mod dead;

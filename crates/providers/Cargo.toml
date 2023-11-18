@@ -1,6 +1,6 @@
 [package]
-name = "axos"
-description = "An optionally colored, non-std derivation pipeline"
+name = "axos-providers"
+description = "A set of rpc providers for the axos derivation pipeline."
 version = "0.1.0"
 edition = "2021"
 license = "MIT"
@@ -10,17 +10,18 @@ homepage = "https://github.com/refcell/axos"
 exclude = ["benches", "tests"]
 
 [features]
-default = ["serloc", "hex-compat", "axos-primitives/default"]
-serloc = ["alloc", "serde", "serde_json", "serde/alloc", "serde_json/alloc"]
+default = ["serdealloc", "hex-compat", "axos-primitives/default"]
+serdealloc = ["alloc", "serde", "serde_json", "serde/alloc", "serde_json/alloc"]
 alloc = []
 serde = ["dep:serde", "axos-primitives/serde"]
 serde_json = ["dep:serde_json"]
 hex-compat = ["axos-primitives/hex-compat"]
+test-utils = []
 
 [dependencies]
 axos-primitives = { path = "../primitives", version = "0.1" }
-axos-providers = { path = "../providers", version = "0.1" }
 anyhow = { version = "1.0", default-features = false, features = [] }
 tracing = { version = "0.1", default-features = false, features = ["attributes"] }
+reqwless = { version = "0.9", default-features = false, features = ["embedded-tls"] }
 serde = { version = "1.0", optional = true, default-features = false, features = ["derive"] }
 serde_json = { version = "1.0", optional = true, default-features = false, features = [] }

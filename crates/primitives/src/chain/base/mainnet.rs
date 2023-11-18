@@ -1,5 +1,7 @@
-use crate::alloc::string::ToString;
 use alloy_primitives::{address, b256, B256, U256};
+
+#[cfg(feature = "alloc")]
+use alloc::string::ToString;
 
 use crate::BlockInfo;
 use crate::ChainConfig;
@@ -10,7 +12,10 @@ impl ChainConfig {
     /// Base Mainnet [ChainConfig].
     pub fn base() -> Self {
         Self {
+            #[cfg(feature = "alloc")]
             network: "base".to_string(),
+            #[cfg(not(feature = "alloc"))]
+            network: "base",
             l1_chain_id: 1,
             l2_chain_id: 8453,
             l1_start_epoch: Epoch {
@@ -86,6 +91,7 @@ mod test {
     "#;
 
     #[test]
+    #[cfg(feature = "serde_json")]
     fn test_base_goerli() {
         let config = ChainConfig::base();
         let parsed = serde_json::from_str::<ChainConfig>(BASE).unwrap();

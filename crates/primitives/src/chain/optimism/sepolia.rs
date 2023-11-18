@@ -1,5 +1,7 @@
-use crate::alloc::string::ToString;
 use alloy_primitives::{address, b256, B256, U256};
+
+#[cfg(feature = "alloc")]
+use alloc::string::ToString;
 
 use crate::BlockInfo;
 use crate::ChainConfig;
@@ -10,7 +12,10 @@ impl ChainConfig {
     /// Optimism Sepolia [ChainConfig].
     pub fn optimism_sepolia() -> Self {
         Self {
+            #[cfg(feature = "alloc")]
             network: "optimism-sepolia".to_string(),
+            #[cfg(not(feature = "alloc"))]
+            network: "optimism-sepolia",
             l1_chain_id: 11155111,
             l2_chain_id: 11155420,
             l1_start_epoch: Epoch {
@@ -86,6 +91,7 @@ mod test {
     "#;
 
     #[test]
+    #[cfg(feature = "serde_json")]
     fn test_optimism_sepolia() {
         let config = ChainConfig::optimism_sepolia();
         let parsed = serde_json::from_str::<ChainConfig>(OPTIMISM_SEPOLIA).unwrap();

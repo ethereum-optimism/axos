@@ -1,5 +1,7 @@
-use crate::alloc::string::ToString;
 use alloy_primitives::{address, b256, U256};
+
+#[cfg(feature = "alloc")]
+use alloc::string::ToString;
 
 use crate::BlockInfo;
 use crate::ChainConfig;
@@ -10,7 +12,10 @@ impl ChainConfig {
     /// Optimism Goerli [ChainConfig].
     pub fn optimism_goerli() -> Self {
         Self {
+            #[cfg(feature = "alloc")]
             network: "optimism-goerli".to_string(),
+            #[cfg(not(feature = "alloc"))]
+            network: "optimism-goerli",
             l1_chain_id: 5,
             l2_chain_id: 420,
             l1_start_epoch: Epoch {
@@ -88,6 +93,7 @@ mod test {
     "#;
 
     #[test]
+    #[cfg(feature = "serde_json")]
     fn test_optimism_goerli() {
         let config = ChainConfig::optimism_goerli();
         let parsed = serde_json::from_str::<ChainConfig>(OPTIMISM_GOERLI).unwrap();
