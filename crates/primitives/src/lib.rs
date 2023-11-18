@@ -15,8 +15,13 @@ extern crate alloc;
 /// Re-export used [alloy_primitives] types for convenience.
 pub use alloy_primitives::{address, b256, B256, U256};
 
+// Testing utils
+#[cfg(feature = "test-utils")]
+pub mod test_utils;
+
 mod blocks;
 mod chain;
+mod info;
 mod peers;
 mod sync;
 mod system;
@@ -25,6 +30,8 @@ mod system;
 pub use blocks::*;
 #[doc(inline)]
 pub use chain::*;
+#[doc(inline)]
+pub use info::*;
 #[doc(inline)]
 pub use peers::*;
 #[doc(inline)]

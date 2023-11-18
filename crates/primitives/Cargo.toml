@@ -16,6 +16,7 @@ alloc = [ ]
 serde = [ "dep:serde", "alloy-primitives/serde" ]
 serde_json = [ "dep:serde_json" ]
 hex-compat = [ "alloy-primitives/hex-compat" ]
+test-utils = []
 
 [dependencies]
 serde = { version = "1.0", optional = true, default-features = false, features = ["derive"] }
