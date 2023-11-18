@@ -20,7 +20,7 @@ anyhow = { version = "1.0" }
 # loss = { path = "../../crates/loss" }
 axos = { path = "../../crates/axos" }
 axos-primitives = { path = "../../crates/primitives" }
-axos-providers = { path = "../../crates/providers" }
+axos-providers = { path = "../../crates/providers", features = ["test-utils"] }
 tracing = { version = "0.1" }
 tracing-subscriber = { version = "0.3", features = ["alloc", "env-filter", "json"] }
 serde = { version = "1.0", features = ["derive"] }

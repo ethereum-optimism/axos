@@ -2,6 +2,8 @@ use clap::Parser;
 
 /// Run the first stage the axos derivation pipeline.
 fn sync_pipe(l2_rpc_url: Option<String>) -> anyhow::Result<()> {
+    // Try to get the L2 RPC URL from the `L2_RPC_URL` environment variable if not provided.
+    let l2_rpc_url = l2_rpc_url.or_else(|| std::env::var("L2_RPC_URL").ok());
     let l2_rpc_url = l2_rpc_url.ok_or_else(|| anyhow::anyhow!("L2 RPC URL not provided."))?;
     let mock_provider = axos_providers::mock::MockProvider::new(l2_rpc_url);
 

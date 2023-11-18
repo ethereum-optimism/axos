@@ -25,3 +25,6 @@ tests: # run all tests
     --all-features \
     --workspace \
     --exclude examples
+
+axt: # run axt
+  cd bins/axt && cargo +nightly run
