@@ -7,6 +7,10 @@ use axos_primitives::{BlockId, BlockWithTransactions};
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
+// todo(refcell): The provider should be removed and replaced with support
+//                for alloy-providers once the alloy repository is public
+//                at https://github.com/alloy-rs/alloy.
+
 /// Provider Trait
 pub trait Provider {
     /// Fetch a block with transactions.

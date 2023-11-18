@@ -19,19 +19,28 @@ pub use alloy_primitives::{address, b256, B256, U256};
 #[cfg(feature = "test-utils")]
 pub mod test_utils;
 
+mod attributes;
 mod blocks;
 mod chain;
-mod info;
+mod epoch;
+mod head;
+mod l1_block;
 mod peers;
 mod sync;
 mod system;
 
 #[doc(inline)]
+pub use attributes::*;
+#[doc(inline)]
 pub use blocks::*;
 #[doc(inline)]
 pub use chain::*;
 #[doc(inline)]
-pub use info::*;
+pub use epoch::*;
+#[doc(inline)]
+pub use head::*;
+#[doc(inline)]
+pub use l1_block::*;
 #[doc(inline)]
 pub use peers::*;
 #[doc(inline)]
