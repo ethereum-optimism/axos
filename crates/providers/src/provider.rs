@@ -1,3 +1,7 @@
+//! Provider Trait
+//!
+//! This module defines the `Provider` trait, which exposes a host of
+//! methods for fetching chain data.
 use axos_primitives::{BlockId, BlockWithTransactions};
 
 #[cfg(feature = "serde")]

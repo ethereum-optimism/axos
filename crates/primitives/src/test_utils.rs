@@ -1,3 +1,6 @@
+//! Test utilities for the primitives crate.
+//!
+//! This module is only available when the `test-utils` feature is enabled.
 use crate::blocks::BlockWithTransactions;
 
 /// Returns a valid example block with transactions.

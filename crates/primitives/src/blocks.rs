@@ -4,7 +4,8 @@ use serde::{Deserialize, Serialize};
 #[cfg(feature = "alloc")]
 use alloc::vec::Vec;
 
-pub use alloy_primitives::{BlockHash, BlockNumber, B256};
+use alloy_primitives::B256;
+pub use alloy_primitives::{BlockHash, BlockNumber};
 
 /// A Block Identifier
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]

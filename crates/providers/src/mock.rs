@@ -9,6 +9,7 @@ use axos_primitives::{BlockId, BlockWithTransactions};
 /// A mock provider for testing.
 #[derive(Debug, Clone)]
 pub struct MockProvider {
+    /// The base URL.
     #[cfg(feature = "alloc")]
     base_url: String,
     #[cfg(not(feature = "alloc"))]
@@ -29,8 +30,9 @@ impl Provider for MockProvider {
     /// Fetch a block with transactions.
     fn get_block_with_txs(
         &self,
-        block_id: BlockId,
+        _block_id: BlockId,
     ) -> Result<Option<BlockWithTransactions>, Error> {
+        tracing::debug!("get_block_with_txs, base url: {}", self.base_url);
         Ok(Some(BlockWithTransactions::default()))
     }
 }

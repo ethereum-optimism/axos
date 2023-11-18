@@ -1,10 +1,14 @@
-use axos_primitives::{BlockId, BlockNumber, ChainConfig, HeadInfo};
+use axos_primitives::{ChainConfig, HeadInfo};
+// use axos_primitives::{BlockId, BlockNumber};
 use axos_providers::provider::Provider;
 
+/// A query for the head info.
+#[derive(Debug, Clone)]
 pub struct HeadInfoQuery {}
 
 impl HeadInfoQuery {
-    pub fn get_head_info<P: Provider>(p: &P, config: &ChainConfig) -> HeadInfo {
+    /// Get the head info.
+    pub fn get_head_info<P: Provider>(_p: &P, config: &ChainConfig) -> HeadInfo {
         // p.get_block_with_txs(BlockId::Number(BlockNumber::Finalized))
         //     .await
         //     .ok()

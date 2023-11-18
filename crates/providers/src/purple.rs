@@ -1,9 +1,15 @@
+//! Purple Provider
+//!
+//! The purple provider is constructs purple, synchronous methods
+//! that internally use the runtime to execute asynchronous calls.
 #[cfg(feature = "alloc")]
 use alloc::string::String;
 // use axos_primitives::{BlockHash, BlockId, BlockNumber};
 
 /// An HTTP RPC provider with purple-colored functions.
+#[derive(Debug, Clone)]
 pub struct PurpleProvider {
+    /// The base URL for the provider.
     #[cfg(feature = "alloc")]
     pub base: String,
     #[cfg(not(feature = "alloc"))]
