@@ -119,6 +119,29 @@ mod tests {
     // use super::*;
     // #[cfg(feature = "alloc")]
     // use alloc::vec::Vec;
+    // #[cfg(feature = "alloc")]
+    // use alloc::string::ToString;
+    // use axos_primitives::BlockWithTransactions;
+    // use axos_providers::mock::MockProvider;
+    //
+    // fn build_mock_provider() -> MockProvider {
+    //     let url = {
+    //         #[cfg(feature = "alloc")] "http://localhost:8080".to_string();
+    //         #[cfg(not(feature = "alloc"))] "http://localhost:8080";
+    //     };
+    //     MockProvider::new(url)
+    // }
+    //
+    // #[test]
+    // fn test_ingest_mock_provider() {
+    //     let mut provider = build_mock_provider();
+    //     let poll_queue = PollQueue::new();
+    //
+    // }
+
+    // use super::*;
+    // #[cfg(feature = "alloc")]
+    // use alloc::vec::Vec;
     // use axos_primitives::BlockWithTransactions;
 
     // #[test]

@@ -13,7 +13,7 @@
 extern crate alloc;
 
 /// Re-export used [alloy_primitives] types for convenience.
-pub use alloy_primitives::{address, b256, B256, U256};
+pub use alloy_primitives::{address, b256, FixedBytes, B256, U256};
 
 // Testing utils
 #[cfg(feature = "test-utils")]
