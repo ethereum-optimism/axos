@@ -4,7 +4,8 @@ use alloy_primitives::Address;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-use crate::blocks::{BlockInfo, Epoch};
+use crate::blocks::BlockInfo;
+use crate::epoch::Epoch;
 use crate::system::SystemConfig;
 
 mod base;
