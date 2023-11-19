@@ -57,3 +57,9 @@ pub struct ChainConfig {
 fn default_blocktime() -> u64 {
     2
 }
+
+impl Default for ChainConfig {
+    fn default() -> Self {
+        ChainConfig::optimism()
+    }
+}

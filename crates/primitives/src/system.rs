@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 /// Optimism system config contract values
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub struct SystemConfig {
     /// Batch sender address
     pub batch_sender: Address,
