@@ -9,7 +9,7 @@ fn sync_pipe(l2_rpc_url: Option<String>) -> anyhow::Result<()> {
 
     let chain_config = axos_primitives::ChainConfig::base_goerli();
 
-    let head = axos::HeadInfoQuery::get_head_info(&mock_provider, &chain_config);
+    let head = axos::info::HeadInfoQuery::get_head_info(&mock_provider, &chain_config);
 
     println!("{:?}", head);
 

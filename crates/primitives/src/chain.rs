@@ -13,7 +13,7 @@ mod optimism;
 
 /// A Chain Configuration
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct ChainConfig {
     /// The network name
     #[cfg(feature = "alloc")]

@@ -1,3 +1,7 @@
+//! Chain Information Module
+//!
+//! Contains utilities for querying chain information.
+
 use axos_primitives::{BlockId, BlockKind, ChainConfig, HeadInfo};
 use axos_providers::provider::Provider;
 
