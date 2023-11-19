@@ -75,9 +75,6 @@ mod test {
     use super::*;
     #[cfg(feature = "alloc")]
     use alloc::string::ToString;
-    // #[cfg(feature = "alloc")]
-    // use alloc::vec::Vec;
-    // use axos_primitives::BlockWithTransactions;
     use axos_providers::mock::MockProvider;
 
     fn build_mock_provider() -> MockProvider {
@@ -92,6 +89,9 @@ mod test {
     fn test_provider() {
         let provider = build_mock_provider();
         let inner_provider = InnerProvider::from(provider);
+        assert!(inner_provider
+            .get_block_with_txs(BlockId::Number(1))
+            .is_ok());
         assert!(inner_provider
             .get_block_with_txs(BlockId::Number(1))
             .is_ok());

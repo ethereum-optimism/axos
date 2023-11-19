@@ -3,6 +3,30 @@
 //! The poll queue is a one-shot, synchronous [BlockIngestor] implementation
 //! that polls the provider for new blocks and ingests them into an internal
 //! queue. Seen blocks are not re-ingested.
+//!
+//! ## Example
+//!
+//! The [PollQueue] implements the [Iterator] trait, so it can be used as an
+//! iterator providing [BlockWithTransactions].
+//!
+#![cfg_attr(
+    feature = "alloc",
+    doc = r#"
+```rust
+use axos_providers::provider::Provider;
+use axos::ingest::poll_queue::PollQueue;
+use axos_providers::mock::MockProvider;
+
+let provider = MockProvider::new("http://localhost:8080".to_string());
+let mut poll_queue = PollQueue::from(Box::new(provider) as Box<dyn Provider>);
+let block = poll_queue.next().unwrap();
+assert_eq!(block.number, 2);
+```
+"#
+)]
+
+#[cfg(feature = "alloc")]
+use alloc::boxed::Box;
 
 use axos_primitives::{BlockId, BlockKind, BlockWithTransactions};
 use axos_providers::provider::Provider;
@@ -26,6 +50,26 @@ pub struct PollQueue {
     pub l1_latest_block: u64,
     /// The L2 latest block
     pub l2_latest_block: u64,
+}
+
+#[cfg(feature = "alloc")]
+impl From<Box<dyn Provider>> for PollQueue {
+    fn from(provider: Box<dyn Provider>) -> Self {
+        Self {
+            provider: provider.into(),
+            ..Default::default()
+        }
+    }
+}
+
+#[cfg(not(feature = "alloc"))]
+impl From<&'static mut dyn Provider> for PollQueue {
+    fn from(provider: &'static mut dyn Provider) -> Self {
+        Self {
+            provider: provider.into(),
+            ..Default::default()
+        }
+    }
 }
 
 impl PollQueue {
@@ -78,7 +122,7 @@ impl PollQueue {
     }
 
     /// Loads blocks from the provider into the queue.
-    fn load_blocks(&mut self) {
+    pub fn load_blocks(&mut self) {
         // Get the latest known block
         let latest_block = match self
             .provider
@@ -108,6 +152,14 @@ impl PollQueue {
     }
 }
 
+impl Iterator for PollQueue {
+    type Item = BlockWithTransactions;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.next_block()
+    }
+}
+
 impl BlockIngestor for PollQueue {
     fn try_ingest(&mut self) -> anyhow::Result<Option<BlockUpdate>> {
         Ok(self.next_block().map(BlockUpdate::NewBlock))
@@ -116,48 +168,55 @@ impl BlockIngestor for PollQueue {
 
 #[cfg(test)]
 mod tests {
-    // use super::*;
-    // #[cfg(feature = "alloc")]
-    // use alloc::vec::Vec;
-    // #[cfg(feature = "alloc")]
-    // use alloc::string::ToString;
-    // use axos_primitives::BlockWithTransactions;
-    // use axos_providers::mock::MockProvider;
-    //
-    // fn build_mock_provider() -> MockProvider {
-    //     let url = {
-    //         #[cfg(feature = "alloc")] "http://localhost:8080".to_string();
-    //         #[cfg(not(feature = "alloc"))] "http://localhost:8080";
-    //     };
-    //     MockProvider::new(url)
-    // }
-    //
-    // #[test]
-    // fn test_ingest_mock_provider() {
-    //     let mut provider = build_mock_provider();
-    //     let poll_queue = PollQueue::new();
-    //
-    // }
+    use super::*;
+    #[cfg(feature = "alloc")]
+    use alloc::string::ToString;
+    use axos_primitives::BlockWithTransactions;
+    use axos_providers::mock::MockProvider;
 
-    // use super::*;
-    // #[cfg(feature = "alloc")]
-    // use alloc::vec::Vec;
-    // use axos_primitives::BlockWithTransactions;
+    fn build_mock_provider() -> MockProvider {
+        #[cfg(feature = "alloc")]
+        let url = "http://localhost:8080".to_string();
+        #[cfg(not(feature = "alloc"))]
+        let url = "http://localhost:8080";
+        MockProvider::new(url)
+    }
 
-    // #[test]
-    // fn test_ingestor() {
-    //     let mut ingestor = Ingestor::new();
-    //     let block = BlockWithTransactions::default();
-    //     let block2 = ingestor.try_ingest().unwrap();
-    //     assert_eq!(block, block2);
-    // }
-    //
-    // #[test]
-    // #[cfg(feature = "alloc")]
-    // fn test_ingestor_queue() {
-    //     let mut ingestor = Ingestor::new();
-    //     let block = BlockWithTransactions::default();
-    //     let block2 = ingestor.try_ingest().unwrap();
-    //     assert_eq!(block, block2);
-    // }
+    #[test]
+    #[cfg(feature = "alloc")]
+    fn test_ingest_mock_provider() {
+        use axos_primitives::B256;
+
+        let provider = build_mock_provider();
+        let mut poll_queue = PollQueue::from(Box::new(provider) as Box<dyn Provider>);
+        let block = poll_queue.try_ingest().unwrap();
+        let mut expected_hash = [0; 32];
+        expected_hash[31] = 2;
+        let mut expected_parent_hash = [0; 32];
+        expected_parent_hash[31] = 1;
+        let expected_block = BlockWithTransactions {
+            number: 2,
+            hash: B256::from(expected_hash),
+            parent_hash: B256::from(expected_parent_hash),
+            timestamp: 2,
+            transactions: Default::default(),
+        };
+        assert_eq!(block, Some(BlockUpdate::NewBlock(expected_block)));
+    }
+
+    #[test]
+    #[cfg(not(feature = "alloc"))]
+    fn test_ingest_mock_provider() {
+        let provider = build_mock_provider();
+        let mut poll_queue = PollQueue::from(&mut provider as &mut dyn Provider);
+        let block = poll_queue.try_ingest().unwrap();
+        let expected_block = BlockWithTransactions {
+            number: 2,
+            hash: [0; 32],
+            parent_hash: [0; 32],
+            timestamp: 2,
+            transactions: Default::default(),
+        };
+        assert_eq!(block, Some(BlockUpdate::NewBlock(expected_block)));
+    }
 }

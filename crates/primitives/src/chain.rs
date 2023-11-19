@@ -13,7 +13,7 @@ mod optimism;
 
 /// A Chain Configuration
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(Debug, Clone, PartialEq, Eq, Default)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ChainConfig {
     /// The network name
     #[cfg(feature = "alloc")]
@@ -56,4 +56,10 @@ pub struct ChainConfig {
 
 fn default_blocktime() -> u64 {
     2
+}
+
+impl Default for ChainConfig {
+    fn default() -> Self {
+        ChainConfig::optimism()
+    }
 }
