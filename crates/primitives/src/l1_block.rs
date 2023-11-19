@@ -28,6 +28,18 @@ pub struct SetL1BlockValuesCall(
     #[cfg(feature = "alloc")] pub Vec<u8>,
 );
 
+impl SetL1BlockValuesCall {
+    /// Returns the length of the calldata.
+    pub fn len(&self) -> usize {
+        self.0.len()
+    }
+
+    /// Returns true if the calldata is empty.
+    pub fn is_empty(&self) -> bool {
+        self.0.is_empty()
+    }
+}
+
 /// Helper macro that checks the length of a byte slice and
 /// returns an error if it is not the expected length.
 macro_rules! check_length {
@@ -78,6 +90,19 @@ impl TryFrom<Vec<u8>> for SetL1BlockValuesCall {
 // Converts a byte slice into a SetL1BlockValuesCall.
 // The length of the input slice must be 260 bytes.
 // The first 4 bytes must match the function selector for setL1BlockValues.
+impl TryFrom<&[u8]> for SetL1BlockValuesCall {
+    type Error = anyhow::Error;
+
+    fn try_from(value: &[u8]) -> anyhow::Result<Self> {
+        check_length!(value, 260, "SetL1BlockValuesCall");
+        check_selector!(value, SET_L1_BLOCK_VALUES_SELECTOR, "SetL1BlockValuesCall");
+        Ok(Self(value.to_vec()))
+    }
+}
+
+// Converts a byte array into a SetL1BlockValuesCall.
+// The length of the input slice must be 260 bytes.
+// The first 4 bytes must match the function selector for setL1BlockValues.
 impl TryFrom<[u8; 260]> for SetL1BlockValuesCall {
     type Error = anyhow::Error;
 
@@ -89,27 +114,153 @@ impl TryFrom<[u8; 260]> for SetL1BlockValuesCall {
 }
 
 impl SetL1BlockValuesCall {
-    /// Parses the function selector from the call.
-    pub fn parse_function_selector(&self) -> anyhow::Result<FixedBytes<4>> {
+    /// Parses and returns the function selector from the call.
+    pub fn get_function_selector(&self) -> anyhow::Result<FixedBytes<4>> {
         let bys = extract_bytes!(self.0, 0, 4, "SetL1BlockValuesCall");
         Ok(FixedBytes::from_slice(bys))
+    }
+
+    /// Parses and returns the block number from the calldata.
+    pub fn get_block_number(&self) -> anyhow::Result<u64> {
+        let bys = extract_bytes!(self.0, 4, 36, "SetL1BlockValuesCall");
+        let bys = bys[24..]
+            .try_into()
+            .map_err(|_| anyhow::anyhow!("Invalid input length for SetL1BlockValuesCall"))?;
+        Ok(u64::from_be_bytes(bys))
+    }
+
+    /// Parses and returns the block timestamp from the calldata.
+    pub fn get_block_timestamp(&self) -> anyhow::Result<u64> {
+        let bys = extract_bytes!(self.0, 36, 68, "SetL1BlockValuesCall");
+        let bys = bys[24..]
+            .try_into()
+            .map_err(|_| anyhow::anyhow!("Invalid input length for SetL1BlockValuesCall"))?;
+        Ok(u64::from_be_bytes(bys))
+    }
+
+    /// Parses and returns the basefee from the calldata.
+    pub fn get_basefee(&self) -> anyhow::Result<U256> {
+        let bys = extract_bytes!(self.0, 68, 100, "SetL1BlockValuesCall");
+        Ok(U256::from_be_slice(bys))
+    }
+
+    /// Parses and returns the expected hash of the block from the calldata.
+    pub fn get_block_hash(&self) -> anyhow::Result<B256> {
+        let bys = extract_bytes!(self.0, 100, 132, "SetL1BlockValuesCall");
+        Ok(B256::from_slice(bys))
+    }
+
+    /// Parses and returns the sequence number from the calldata.
+    pub fn get_sequence_number(&self) -> anyhow::Result<u64> {
+        let bys = extract_bytes!(self.0, 132, 164, "SetL1BlockValuesCall");
+        let bys = bys[24..]
+            .try_into()
+            .map_err(|_| anyhow::anyhow!("Invalid input length for SetL1BlockValuesCall"))?;
+        Ok(u64::from_be_bytes(bys))
+    }
+
+    /// Parses and returns the batcher hash from the calldata.
+    pub fn get_batcher_hash(&self) -> anyhow::Result<B256> {
+        let bys = extract_bytes!(self.0, 164, 196, "SetL1BlockValuesCall");
+        Ok(B256::from_slice(bys))
+    }
+
+    /// Parses and returns the L1 fee overhead from the calldata.
+    pub fn get_l1_fee_overhead(&self) -> anyhow::Result<U256> {
+        let bys = extract_bytes!(self.0, 196, 228, "SetL1BlockValuesCall");
+        Ok(U256::from_be_slice(bys))
+    }
+
+    /// Parses and returns the L1 fee scalar from the calldata.
+    pub fn get_l1_fee_scalar(&self) -> anyhow::Result<U256> {
+        let bys = extract_bytes!(self.0, 228, 260, "SetL1BlockValuesCall");
+        Ok(U256::from_be_slice(bys))
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use alloy_primitives::hex;
+    use alloy_primitives::{b256, hex};
+
+    const TEST_CALLDATA: [u8; 260] = hex!(
+        "015d8eb900000000000000000000000000000000000000000000000000000000008768240000000000000000000000000000000000000000000000000000000064443450000000000000000000000000000000000000000000000000000000000000000e0444c991c5fe1d7291ff34b3f5c3b44ee861f021396d33ba3255b83df30e357d00000000000000000000000000000000000000000000000000000000000000050000000000000000000000007431310e026b69bfc676c0013e12a1a11411eec9000000000000000000000000000000000000000000000000000000000000083400000000000000000000000000000000000000000000000000000000000f4240"
+    );
 
     #[test]
-    fn test_set_l1_block_values_call() {
-        let calldata = hex!(
-            "015d8eb900000000000000000000000000000000000000000000000000000000008768240000000000000000000000000000000000000000000000000000000064443450000000000000000000000000000000000000000000000000000000000000000e0444c991c5fe1d7291ff34b3f5c3b44ee861f021396d33ba3255b83df30e357d00000000000000000000000000000000000000000000000000000000000000050000000000000000000000007431310e026b69bfc676c0013e12a1a11411eec9000000000000000000000000000000000000000000000000000000000000083400000000000000000000000000000000000000000000000000000000000f4240"
-        );
-        let call = SetL1BlockValuesCall::try_from(calldata).unwrap();
-        assert_eq!(
-            call.parse_function_selector().unwrap(),
-            SET_L1_BLOCK_VALUES_SELECTOR
-        );
+    #[cfg(feature = "alloc")]
+    fn test_try_from_vec() {
+        let call = SetL1BlockValuesCall::try_from(TEST_CALLDATA.to_vec()).unwrap();
+        assert_eq!(call.len(), 260);
+    }
+
+    #[test]
+    fn test_get_function_selector() {
+        let call = SetL1BlockValuesCall::try_from(TEST_CALLDATA).unwrap();
+        let selector = call.get_function_selector().unwrap();
+        assert_eq!(selector, SET_L1_BLOCK_VALUES_SELECTOR);
+    }
+
+    #[test]
+    fn test_get_block_number() {
+        let call = SetL1BlockValuesCall::try_from(TEST_CALLDATA).unwrap();
+        let block_number = call.get_block_number().unwrap();
+        assert_eq!(block_number, 8874020);
+    }
+
+    #[test]
+    fn test_get_block_timestamp() {
+        let call = SetL1BlockValuesCall::try_from(TEST_CALLDATA).unwrap();
+        let block_timestamp = call.get_block_timestamp().unwrap();
+        assert_eq!(block_timestamp, 1682191440);
+    }
+
+    #[test]
+    fn test_get_basefee() {
+        let call = SetL1BlockValuesCall::try_from(TEST_CALLDATA).unwrap();
+        let basefee = call.get_basefee().unwrap();
+        let expected_basefee = U256::from(14u64);
+        assert_eq!(expected_basefee, basefee);
+    }
+
+    #[test]
+    fn test_get_block_hash() {
+        let call = SetL1BlockValuesCall::try_from(TEST_CALLDATA).unwrap();
+        let block_hash = call.get_block_hash().unwrap();
+        let expected_hash =
+            b256!("0444c991c5fe1d7291ff34b3f5c3b44ee861f021396d33ba3255b83df30e357d");
+        assert_eq!(expected_hash, block_hash);
+    }
+
+    #[test]
+    fn test_get_sequence_number() {
+        let call = SetL1BlockValuesCall::try_from(TEST_CALLDATA).unwrap();
+        let sequence_number = call.get_sequence_number().unwrap();
+        assert_eq!(sequence_number, 5);
+    }
+
+    #[test]
+    fn test_get_batcher_hash() {
+        let call = SetL1BlockValuesCall::try_from(TEST_CALLDATA).unwrap();
+        let batcher_hash = call.get_batcher_hash().unwrap();
+        let expected_hash =
+            b256!("0000000000000000000000007431310e026b69bfc676c0013e12a1a11411eec9");
+        assert_eq!(expected_hash, batcher_hash);
+    }
+
+    #[test]
+    fn test_get_l1_fee_overhead() {
+        let call = SetL1BlockValuesCall::try_from(TEST_CALLDATA).unwrap();
+        let l1_fee_overhead = call.get_l1_fee_overhead().unwrap();
+        let expected_l1_fee_overhead = U256::from(2100u64);
+        assert_eq!(expected_l1_fee_overhead, l1_fee_overhead);
+    }
+
+    #[test]
+    fn test_get_l1_fee_scalar() {
+        let call = SetL1BlockValuesCall::try_from(TEST_CALLDATA).unwrap();
+        let l1_fee_scalar = call.get_l1_fee_scalar().unwrap();
+        let expected_l1_fee_scalar = U256::from(1000000u64);
+        assert_eq!(expected_l1_fee_scalar, l1_fee_scalar);
     }
 }
