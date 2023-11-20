@@ -55,9 +55,9 @@ assert_eq!(deserialized, config);
 "
 )]
 
-#[cfg(feature = "alloc")]
-use alloc::string::String;
 use axos_primitives::ChainConfig;
+use axos_primitives::GenericString;
+
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
@@ -66,33 +66,18 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Default, Eq, PartialEq)]
 pub struct Config {
     /// The base chain RPC URL
-    #[cfg(feature = "alloc")]
-    pub l1_rpc_url: String,
-    #[cfg(not(feature = "alloc"))]
-    pub l1_rpc_url: &'static str,
+    pub l1_rpc_url: GenericString,
     /// The L2 chain RPC URL
-    #[cfg(feature = "alloc")]
-    pub l2_rpc_url: String,
-    #[cfg(not(feature = "alloc"))]
-    pub l2_rpc_url: &'static str,
+    pub l2_rpc_url: GenericString,
     /// The L2 engine API URL
-    #[cfg(feature = "alloc")]
-    pub l2_engine_url: String,
-    #[cfg(not(feature = "alloc"))]
-    pub l2_engine_url: &'static str,
+    pub l2_engine_url: GenericString,
     /// The base chain config
     pub chain: ChainConfig,
     /// Engine API JWT Secret
     /// This is used to authenticate with the engine API
-    #[cfg(feature = "alloc")]
-    pub jwt_secret: String,
-    #[cfg(not(feature = "alloc"))]
-    pub jwt_secret: &'static str,
+    pub jwt_secret: GenericString,
     /// A trusted L2 RPC URL to use for fast/checkpoint syncing
-    #[cfg(feature = "alloc")]
-    pub checkpoint_sync_url: Option<String>,
-    #[cfg(not(feature = "alloc"))]
-    pub checkpoint_sync_url: Option<&'static str>,
+    pub checkpoint_sync_url: Option<GenericString>,
     /// The port of RPC server
     pub rpc_port: u16,
     /// The devnet mode.
