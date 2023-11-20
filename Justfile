@@ -35,4 +35,4 @@ doctests: # run all doctests
     --exclude examples
 
 axt: # run axt
-  cd bins/axt && cargo +nightly run
+  cd bins/axt && cargo +nightly run -- -vvv

@@ -1,21 +1,16 @@
 use alloy_primitives::{address, b256, U256};
 
-#[cfg(feature = "alloc")]
-use alloc::string::ToString;
-
 use crate::BlockInfo;
 use crate::ChainConfig;
 use crate::Epoch;
+use crate::GenericString;
 use crate::SystemConfig;
 
 impl ChainConfig {
     /// Optimism Goerli [ChainConfig].
     pub fn optimism_goerli() -> Self {
         Self {
-            #[cfg(feature = "alloc")]
-            network: "optimism-goerli".to_string(),
-            #[cfg(not(feature = "alloc"))]
-            network: "optimism-goerli",
+            network: GenericString::from("optimism-goerli"),
             l1_chain_id: 5,
             l2_chain_id: 420,
             l1_start_epoch: Epoch {

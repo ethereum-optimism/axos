@@ -20,3 +20,29 @@ pub type GenericString = alloc::string::String;
 /// A string type that can be used with no heap allocation.
 #[cfg(all(not(feature = "alloc"), not(feature = "std")))]
 pub type GenericString = &'static str;
+
+#[cfg(all(not(feature = "alloc"), not(feature = "std")))]
+impl From<&'static str> for GenericString {
+    fn from(s: &'static str) -> Self {
+        s
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    #[cfg(feature = "alloc")]
+    fn test_alloc_generic_string() {
+        let s = GenericString::from("hello world");
+        assert_eq!(s, "hello world");
+    }
+
+    #[test]
+    #[cfg(not(feature = "alloc"))]
+    fn test_static_generic_string() {
+        let s = GenericString::from("hello world");
+        assert_eq!(s, "hello world");
+    }
+}

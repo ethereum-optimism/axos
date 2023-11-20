@@ -1,11 +1,11 @@
-#[cfg(feature = "alloc")]
-use alloc::string::String;
 use alloy_primitives::Address;
+
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
 use crate::blocks::BlockInfo;
 use crate::epoch::Epoch;
+use crate::str::GenericString;
 use crate::system::SystemConfig;
 
 mod base;
@@ -16,11 +16,7 @@ mod optimism;
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ChainConfig {
     /// The network name
-    #[cfg(feature = "alloc")]
-    pub network: String,
-    /// The network name (no-alloc)
-    #[cfg(not(feature = "alloc"))]
-    pub network: &'static str,
+    pub network: GenericString,
     /// The L1 chain id
     pub l1_chain_id: u64,
     /// The L2 chain id
