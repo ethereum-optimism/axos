@@ -26,6 +26,7 @@ mod epoch;
 mod head;
 mod l1_block;
 mod peers;
+mod str;
 mod sync;
 mod system;
 
@@ -43,6 +44,8 @@ pub use head::*;
 pub use l1_block::*;
 #[doc(inline)]
 pub use peers::*;
+#[doc(inline)]
+pub use str::*;
 #[doc(inline)]
 pub use sync::*;
 #[doc(inline)]
