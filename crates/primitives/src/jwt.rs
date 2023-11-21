@@ -71,7 +71,7 @@ impl JwtSecret {
     #[cfg(feature = "std")]
     #[allow(dead_code)]
     pub(crate) fn generate_claims(&self, time: Option<DateTime<Local>>) -> Claims {
-        let now = time.unwrap_or_else(|| Local::now());
+        let now = time.unwrap_or_else(Local::now);
         let now_secs = now.timestamp();
         Claims {
             iat: now_secs as u64,
