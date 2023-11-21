@@ -19,6 +19,9 @@ pub use alloy_primitives::{address, b256, FixedBytes, B256, U256};
 #[cfg(feature = "test-utils")]
 pub mod test_utils;
 
+#[cfg(feature = "alloc")]
+pub mod jwt;
+
 mod attributes;
 mod blocks;
 mod chain;
