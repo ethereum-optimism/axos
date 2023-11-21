@@ -1,21 +1,27 @@
-//! Derivation Pipeline Configuration
+//! Core Derivation Pipeline Configuration
 //!
 //! ## Build Explicit Config
 //!
-//! ```rust
-//! use axos::config::Config;
-//!
-//! let l1_rpc_url = "http://localhost:9933".to_string();
-//! let l2_rpc_url = "http://localhost:9934".to_string();
-//! let config = Config {
-//!    l1_rpc_url: l1_rpc_url.clone(),
-//!    l2_rpc_url: l2_rpc_url.clone(),
-//!    ..Default::default()
-//! };
-//! assert_eq!(config.l1_rpc_url, l1_rpc_url);
-//! assert_eq!(config.l2_rpc_url, l2_rpc_url);
-//! assert_eq!(config.chain.network, "optimism");
-//! ```
+#![cfg_attr(
+    feature = "alloc",
+    doc = "
+```rust
+use axos_config::Config;
+
+let l1_rpc_url = \"http://localhost:9933\".to_string();
+let l2_rpc_url = \"http://localhost:9934\".to_string();
+
+let config = Config {
+    l1_rpc_url: l1_rpc_url.clone(),
+    l2_rpc_url: l2_rpc_url.clone(),
+    ..Default::default()
+};
+assert_eq!(config.l1_rpc_url, l1_rpc_url);
+assert_eq!(config.l2_rpc_url, l2_rpc_url);
+assert_eq!(config.chain.network, \"optimism\");
+```
+"
+)]
 //!
 //! ## Build Config from Environment Variables
 //!
@@ -23,10 +29,17 @@
     feature = "std",
     doc = "
 ```rust
-use axos::config::Config;
 use std::env;
+use axos_config::Config;
+
 env::set_var(\"AXOS_L1_RPC_URL\", \"http://localhost:9933\");
 env::set_var(\"AXOS_L2_RPC_URL\", \"http://localhost:9934\");
+env::set_var(\"AXOS_L2_ENGINE_URL\", \"http://localhost:9545\");
+env::set_var(\"AXOS_JWT_SECRET\", \"secret\");
+env::set_var(\"AXOS_RPC_PORT\", \"9944\");
+env::set_var(\"AXOS_DEVNET\", \"false\");
+env::set_var(\"AXOS_CHECKPOINT_SYNC_URL\", \"http://localhost:9934\");
+
 let config = Config::from_env();
 assert_eq!(config.l1_rpc_url, \"http://localhost:9933\");
 assert_eq!(config.l2_rpc_url, \"http://localhost:9934\");
@@ -41,8 +54,9 @@ assert_eq!(config.chain.network, \"optimism\");
     feature = "serde",
     doc = "
 ```rust
-use axos::config::Config;
 use serde_json;
+use axos_config::Config;
+
 let config = Config {
     l1_rpc_url: \"http://localhost:9933\".to_string(),
     l2_rpc_url: \"http://localhost:9934\".to_string(),
