@@ -18,17 +18,15 @@ pub enum SyncMode {
 
 #[cfg(feature = "alloc")]
 impl alloc::str::FromStr for SyncMode {
-    #[cfg(feature = "alloc")]
-    type Err = alloc::string::String;
+    type Err = crate::str::GenericString;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        use alloc::string::ToString;
         match s {
             "fast" => Ok(Self::Fast),
             "checkpoint" => Ok(Self::Checkpoint),
             "challenge" => Ok(Self::Challenge),
             "full" => Ok(Self::Full),
-            _ => Err("invalid sync mode".to_string()),
+            _ => Err(Self::Err::from("invalid sync mode")),
         }
     }
 }

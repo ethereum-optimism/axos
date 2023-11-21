@@ -7,7 +7,7 @@
 )]
 #![deny(unused_must_use, rust_2018_idioms)]
 #![cfg_attr(docsrs, feature(doc_cfg, doc_auto_cfg))]
-#![no_std]
+#![cfg_attr(not(feature = "std"), no_std)]
 
 #[cfg(feature = "alloc")]
 extern crate alloc;
@@ -16,7 +16,7 @@ extern crate alloc;
 pub use alloy_primitives::{address, b256, FixedBytes, B256, U256};
 
 // Testing utils
-#[cfg(feature = "test-utils")]
+#[cfg(any(test, feature = "test-utils"))]
 pub mod test_utils;
 
 #[cfg(feature = "alloc")]
