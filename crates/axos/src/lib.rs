@@ -15,7 +15,6 @@ extern crate alloc;
 /// Re-export [axos_primitives] for convenience.
 pub use axos_primitives::*;
 
-pub mod config;
 pub mod info;
 pub mod ingest;
 pub mod stages;

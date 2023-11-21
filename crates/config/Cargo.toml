@@ -1,0 +1,28 @@
+[package]
+name = "axos-config"
+description = "Axos derivation pipeline configuration crate."
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+authors = ["refcell"]
+repository = "https://github.com/refcell/axos"
+homepage = "https://github.com/refcell/axos"
+exclude = ["benches", "tests"]
+
+[features]
+default = ["serdealloc", "hex-compat", "axos-primitives/default"]
+serdealloc = ["alloc", "serde", "serde_json", "serde/alloc", "serde_json/alloc"]
+alloc = ["axos-primitives/alloc", "time/alloc"]
+serde = ["dep:serde", "axos-primitives/serde"]
+serde_json = ["dep:serde_json"]
+hex-compat = ["axos-primitives/hex-compat"]
+test-utils = []
+std = ["axos-primitives/std", "time/std", "anyhow/std", "tracing/std"]
+
+[dependencies]
+time = { version = "0.3", default-features = false }
+axos-primitives = { path = "../primitives", version = "0.1" }
+anyhow = { version = "1.0", default-features = false, features = [] }
+tracing = { version = "0.1", default-features = false, features = ["attributes"] }
+serde = { version = "1.0", optional = true, default-features = false, features = ["derive"] }
+serde_json = { version = "1.0", optional = true, default-features = false, features = [] }
