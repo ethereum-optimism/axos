@@ -1,7 +1,5 @@
 //! Engine API
 
-use core::fmt::Display;
-
 use axos_config::consts::DEFAULT_AUTH_PORT;
 use axos_primitives::jwt::JwtSecret;
 use axos_primitives::GenericString;
@@ -23,7 +21,13 @@ pub struct EngineApi {
 impl EngineApi {
     /// Create a new [EngineApi][crate::engine::EngineApi] instance.
     pub fn new(base_url: GenericString, secret_str: &str) -> Self {
-        let secret = JwtSecret::from_hex(secret_str).unwrap();
+        let secret = JwtSecret::from_hex(secret_str).unwrap_or_else(|_|
+            panic!(
+                "Invalid JWT secret. \
+                Must be a 256 bit hex-encoded secret key used to authenticate with the engine api. \
+                This should be the same as set in the `--auth.secret` flag when executing go-ethereum."
+            )
+        );
         let (base_url, port) = Self::split_base_url(base_url).unwrap_or_else(|_| {
             panic!(
                 "Invalid base url. \
@@ -38,9 +42,7 @@ impl EngineApi {
     }
 
     /// Splits the base url into the address and port
-    fn split_base_url(
-        base_url: impl Into<GenericString> + Display,
-    ) -> Result<(GenericString, u16)> {
+    fn split_base_url(base_url: impl Into<GenericString>) -> Result<(GenericString, u16)> {
         let binding = base_url.into();
         let prefix = binding.split_once("http://").map(|_| "http://").unwrap_or(
             binding

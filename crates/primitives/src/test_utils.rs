@@ -1,52 +1,25 @@
 //! Test utilities for the primitives crate.
 //!
 //! This module is only available when the `test-utils` feature is enabled.
-use crate::blocks::BlockWithTransactions;
 
-use crate::jwt::{Claims, JwtSecret};
 use anyhow::Result;
 
-/// Mock JWT Secret
-pub const MOCK_SECRET: &str = "f79ae5046bc11c9927afe911db7143c51a806c4a537cc08e0d37140b0192f430";
+use crate::claims::Claims;
+use crate::jwt::JwtSecret;
+
+/// Test JWT Secret
+pub const TEST_SECRET: &str = "f79ae8046bc11c9927afe911db7143c51a806c4a537cc08e0d37140b0192f430";
+
+/// Test encoded JWT Token
+/// Built using claims issued at the unix epoch with the default 60 second expiry.
+pub const TEST_ENCODED_TOKEN: &str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjEyMCwiaWF0Ijo2MH0.8wPOSzmSa-atOmdob8IW3plAxYsfynurHRXx_Y0gtCE";
 
 /// Creates mock JWT [Claims] for testing.
 pub fn new_mock_claims() -> Claims {
-    let t = time::OffsetDateTime::UNIX_EPOCH;
-    JwtSecret::generate_claims(t)
+    JwtSecret::generate_claims(chrono::Duration::seconds(60))
 }
 
 /// Creates a mock JWT Secret for testing.
 pub fn new_mock_secret() -> Result<JwtSecret> {
-    JwtSecret::from_hex(MOCK_SECRET)
-}
-
-/// Returns a valid example block with transactions.
-pub fn valid_block() -> Option<BlockWithTransactions> {
-    // let raw_block = r#"{
-    //     "hash": "0x2e4f4aff36bb7951be9742ad349fb1db84643c6bbac5014f3d196fd88fe333eb",
-    //     "parentHash": "0xeccf4c06ad0d27be1cadee5720a509d31a9de0462b52f2cf6045d9a73c9aa504",
-    //     "sha3Uncles": "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
-    //     "miner": "0x4200000000000000000000000000000000000011",
-    //     "stateRoot": "0x5905b2423f299a29db41e377d7ceadf4baa49eed04e1b72957e8c0985e04e730",
-    //     "transactionsRoot": "0x030e481411042a769edde83d790d583ed69f9d3098d4a78d00e008f749fcfd97",
-    //     "receiptsRoot": "0x29079b696c12a19999f3bb303fddb6fc12fb701f427678cca24954b91080ada3",
-    //     "number": "0x7fe52f",
-    //     "gasUsed": "0xb711",
-    //     "gasLimit": "0x17d7840",
-    //     "extraData": "0x",
-    //     "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-    //     "timestamp": "0x644434c2",
-    //     "difficulty": "0x0",
-    //     "totalDifficulty": "0x0",
-    //     "sealFields": [],
-    //     "uncles": [],
-    //     "transactions": [],
-    //     "size": "0x365",
-    //     "mixHash": "0x7aeec5550a9b0616701e49ab835af5f10eadba2a0582016f0e256c9cace0c046",
-    //     "nonce": "0x0000000000000000",
-    //     "baseFeePerGas": "0x32"
-    // }
-    // "#;
-    // serde_json::from_str(raw_block).ok()
-    None
+    JwtSecret::from_hex(TEST_SECRET)
 }
