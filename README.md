@@ -6,7 +6,8 @@
 [![License]][mit-license]
 [![Docs]][Docs-rs]
 [![Latest Version]][crates.io]
-[![rustc 1.31+]][Rust 1.31]
+[![no_std supported][no_std]][nostd]
+[![rustc 1.72.1+]][Rust 1.72.1]
 
 [CI Build Status]: https://img.shields.io/github/actions/workflow/status/refcell/axos/ci.yml?branch=main&label=build
 [Tag Build Status]: https://img.shields.io/github/actions/workflow/status/refcell/axos/tag.yml?branch=main&label=tag
@@ -14,12 +15,14 @@
 [actions]: https://github.com/refcell/axos/actions?query=branch%3Amain
 [Latest Version]: https://img.shields.io/crates/v/axos.svg
 [crates.io]: https://crates.io/crates/axos
-[rustc 1.31+]: https://img.shields.io/badge/rustc_1.31+-lightgray.svg
-[Rust 1.31]: https://blog.rust-lang.org/2018/12/06/Rust-1.31-and-rust-2018.html
+[rustc 1.72.1+]: https://img.shields.io/badge/rustc_1.72.1+-lightgray.svg
+[Rust 1.72.1]: https://blog.rust-lang.org/2023/09/19/Rust-1.72.1.html
 [License]: https://img.shields.io/badge/license-MIT-7795AF.svg
 [mit-license]: https://github.com/refcell/axos/blob/main/LICENSE.md
 [Docs-rs]: https://docs.rs/axos/
 [Docs]: https://img.shields.io/docsrs/axos.svg?color=319e8c&label=docs.rs
+[no_std]: https://img.shields.io/badge/no__std-tested-green.svg
+[nostd]: https://docs.rust-embedded.org/book/intro/no-std.html#summary
 
 **Portable no-std Derivation Pipeline engineered in pure Rust** https://github.com/refcell/axos/labels/alpha
 

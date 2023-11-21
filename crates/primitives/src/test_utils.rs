@@ -3,6 +3,23 @@
 //! This module is only available when the `test-utils` feature is enabled.
 use crate::blocks::BlockWithTransactions;
 
+use crate::jwt::{Claims, JwtSecret};
+use anyhow::Result;
+
+/// Mock JWT Secret
+pub const MOCK_SECRET: &str = "f79ae5046bc11c9927afe911db7143c51a806c4a537cc08e0d37140b0192f430";
+
+/// Creates mock JWT [Claims] for testing.
+pub fn new_mock_claims() -> Claims {
+    let t = time::OffsetDateTime::UNIX_EPOCH;
+    JwtSecret::generate_claims(t)
+}
+
+/// Creates a mock JWT Secret for testing.
+pub fn new_mock_secret() -> Result<JwtSecret> {
+    JwtSecret::from_hex(MOCK_SECRET)
+}
+
 /// Returns a valid example block with transactions.
 pub fn valid_block() -> Option<BlockWithTransactions> {
     // let raw_block = r#"{
