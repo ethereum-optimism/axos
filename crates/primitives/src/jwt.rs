@@ -162,7 +162,7 @@ mod tests {
         claims.iat = 10000000000;
         assert!(!claims.valid(0));
         let max_drift = JWT_MAX_IAT_DIFF.as_seconds_f64() as u64;
-        assert(claims.valid(claims.iat - max_drift));
+        assert!(claims.valid(claims.iat - max_drift));
         assert(!claims.valid(claims.iat - max_drift - 1));
     }
 
