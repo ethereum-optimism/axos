@@ -19,6 +19,7 @@ pub use alloy_primitives::{address, b256, FixedBytes, B256, U256};
 #[cfg(any(test, feature = "test-utils"))]
 pub mod test_utils;
 
+pub mod claims;
 #[cfg(feature = "alloc")]
 pub mod jwt;
 
