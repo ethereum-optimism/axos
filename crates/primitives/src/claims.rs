@@ -19,7 +19,7 @@ pub type InnerClaims = jwt_compact::Claims<jwt_compact::Empty>;
 pub struct Claims(pub InnerClaims);
 
 /// The maximum amount of drift from the JWT claims issued-at `iat` time.
-const JWT_MAX_IAT_DIFF: time::Duration = time::Duration::new(60, 0);
+pub const JWT_MAX_IAT_DIFF: time::Duration = time::Duration::new(60, 0);
 
 impl Claims {
     /// Create a new [Claims] instance with the given issued-at time
@@ -45,7 +45,12 @@ impl Claims {
     #[cfg(not(feature = "std"))]
     #[allow(dead_code)]
     pub fn valid(&self, now: u64) -> bool {
-        now.abs_diff(self.0.issued_at) <= (JWT_MAX_IAT_DIFF.as_seconds_f64() as u64)
+        let issued_at = if let Some(d) = self.0.issued_at {
+            d.timestamp() as u64
+        } else {
+            return false;
+        };
+        now.abs_diff(issued_at) <= (JWT_MAX_IAT_DIFF.as_seconds_f64() as u64)
     }
 
     /// Valid returns if the given claims are valid.
@@ -57,7 +62,6 @@ impl Claims {
         let issued_at = if let Some(d) = self.0.issued_at {
             d.timestamp()
         } else {
-            // tracing::error!("JWT issued-at claim is missing");
             return false;
         };
         now_secs.abs_diff(issued_at) <= (JWT_MAX_IAT_DIFF.as_seconds_f64() as u64)
@@ -86,13 +90,5 @@ mod tests {
         let to = jwt_compact::TimeOptions::new(dur, clock);
         let claims = Claims::new(&to);
         assert!(claims.valid());
-    }
-
-    #[test]
-    #[cfg(not(feature = "std"))]
-    fn test_construct_claims() {
-        let issued_at = TimeOptions::from(time::OffsetDateTime::UNIX_EPOCH);
-        let claims = Claims::new(&issued_at);
-        assert!(claims.valid(issued_at.as_seconds() as u64));
     }
 }

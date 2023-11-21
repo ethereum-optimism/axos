@@ -6,6 +6,9 @@ use axos_primitives::GenericString;
 
 use anyhow::Result;
 
+#[cfg(feature = "alloc")]
+use alloc::format;
+
 /// The Engine Api
 #[derive(Debug, Clone)]
 pub struct EngineApi {

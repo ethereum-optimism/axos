@@ -5,7 +5,7 @@ set dotenv-load := true
 set positional-arguments := true
 
 # Default recipe that runs if you type "just".
-default: fmt clippy tests doctests
+default: fmt clippy tests doctests testall
 
 # Formats and checks rust files
 fmt: fmt-write fmt-check
@@ -25,6 +25,9 @@ tests: # run all tests
     --all-features \
     --workspace \
     --exclude examples
+
+testall: # run all tests default features
+  cargo test --all
 
 doctests: # run all doctests
   cargo +nightly test \

@@ -153,10 +153,29 @@ mod tests {
     fn test_valid_mock_claims() {
         let mut claims = new_mock_claims();
         assert!(claims.valid(0));
-        claims.iat = 10000000000;
+        claims.0.issued_at = chrono::DateTime::from_timestamp(100000000, 0);
         assert!(!claims.valid(0));
-        let max_drift = crate::claims::JWT_MAX_IAT_DIFF.as_seconds_f64() as u64;
-        assert!(claims.valid(claims.iat - max_drift));
-        assert!(!claims.valid(claims.iat - max_drift - 1));
+        let max_drift =
+            chrono::Duration::seconds(crate::claims::JWT_MAX_IAT_DIFF.as_seconds_f64() as i64);
+        let max_drift_plus_one =
+            chrono::Duration::seconds(crate::claims::JWT_MAX_IAT_DIFF.as_seconds_f64() as i64 + 1);
+        assert!(claims.valid(
+            claims
+                .0
+                .issued_at
+                .unwrap()
+                .checked_sub_signed(max_drift)
+                .unwrap()
+                .timestamp() as u64
+        ));
+        assert!(!claims.valid(
+            claims
+                .0
+                .issued_at
+                .unwrap()
+                .checked_sub_signed(max_drift_plus_one)
+                .unwrap()
+                .timestamp() as u64
+        ));
     }
 }
