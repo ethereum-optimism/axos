@@ -56,11 +56,12 @@ impl Provider for MockProvider {
             *self.block_number.borrow_mut() += 1;
         }
         Ok(Some(BlockWithTransactions {
-            number: *self.block_number.borrow(),
-            hash: zero_hash_with_suffix!(*self.block_number.borrow() as u8),
+            number: (*self.block_number.borrow()).try_into().ok(),
+            hash: zero_hash_with_suffix!(*self.block_number.borrow() as u8).into(),
             parent_hash: zero_hash_with_suffix!((*self.block_number.borrow() as u8) - 1),
-            timestamp: *self.block_number.borrow(),
+            timestamp: (*self.block_number.borrow()).try_into().unwrap_or_default(),
             transactions: Default::default(),
+            ..Default::default()
         }))
     }
 }

@@ -27,7 +27,7 @@ impl TryFrom<BlockWithTransactions> for HeadInfo {
             .ok_or(anyhow::anyhow!(
                 "Could not find the L1 attributes deposited transaction"
             ))?
-            .data
+            .input
             .clone();
 
         let call = AttributesDepositedCall::try_from(tx_calldata)?;
@@ -44,7 +44,7 @@ impl TryFrom<BlockWithTransactions> for HeadInfo {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::Transaction;
+    use crate::transactions::Transaction;
     use alloy_primitives::{b256, hex, B256};
 
     const TEST_CALLDATA: [u8; 260] = hex!(
@@ -57,17 +57,19 @@ mod tests {
     #[cfg(feature = "alloc")]
     fn test_head_info_try_from() {
         use alloc::vec;
+        use alloy_primitives::{U256, U64};
 
         let block = BlockWithTransactions {
-            hash: BLOCK_HASH,
-            number: 8874020,
+            hash: Some(BLOCK_HASH),
+            number: Some(U64::from(8874020)),
             parent_hash: B256::default(),
-            timestamp: 1682191440,
+            timestamp: U256::from(1682191440),
             transactions: vec![Transaction {
                 hash: B256::default(),
-                data: TEST_CALLDATA.to_vec(),
+                input: TEST_CALLDATA.to_vec().into(),
                 ..Default::default()
             }],
+            ..Default::default()
         };
 
         let head_info = HeadInfo::try_from(block).unwrap();
