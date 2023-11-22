@@ -6,7 +6,7 @@ use alloc::vec::Vec;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-use alloy_primitives::{B256, U256};
+use alloy_primitives::{Bytes, B256, U256};
 
 use crate::SetL1BlockValuesCall;
 
@@ -37,6 +37,24 @@ impl TryFrom<Vec<u8>> for AttributesDepositedCall {
     type Error = anyhow::Error;
 
     fn try_from(value: Vec<u8>) -> anyhow::Result<Self> {
+        let call = SetL1BlockValuesCall::try_from(value)?;
+        Ok(Self {
+            number: call.get_block_number()?,
+            timestamp: call.get_block_timestamp()?,
+            basefee: call.get_basefee()?,
+            hash: call.get_block_hash()?,
+            sequence_number: call.get_sequence_number()?,
+            batcher_hash: call.get_batcher_hash()?,
+            fee_overhead: call.get_l1_fee_overhead()?,
+            fee_scalar: call.get_l1_fee_scalar()?,
+        })
+    }
+}
+
+impl TryFrom<Bytes> for AttributesDepositedCall {
+    type Error = anyhow::Error;
+
+    fn try_from(value: Bytes) -> anyhow::Result<Self> {
         let call = SetL1BlockValuesCall::try_from(value)?;
         Ok(Self {
             number: call.get_block_number()?,

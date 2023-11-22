@@ -16,11 +16,12 @@
 use axos_providers::provider::Provider;
 use axos::ingest::poll_queue::PollQueue;
 use axos_providers::mock::MockProvider;
+use axos_primitives::U64;
 
 let provider = MockProvider::new("http://localhost:8080".to_string());
 let mut poll_queue = PollQueue::from(Box::new(provider) as Box<dyn Provider>);
 let block = poll_queue.next().unwrap();
-assert_eq!(block.number, 2);
+assert_eq!(block.number, Some(U64::from(2)));
 ```
 "#
 )]
@@ -100,7 +101,11 @@ impl PollQueue {
         }
 
         // Check if the block is already in the queue
-        if self.queue.iter().any(|b| b.number == block_number) {
+        if self.queue.iter().any(|b| {
+            b.number
+                .map(|n| n.to::<u64>() == block_number)
+                .unwrap_or(false)
+        }) {
             return;
         }
 
@@ -139,7 +144,11 @@ impl PollQueue {
             }
         };
 
-        let blocks = self.l2_latest_block..latest_block.number;
+        let blocks = self.l2_latest_block
+            ..(latest_block
+                .number
+                .map(|n| n.to::<u64>())
+                .unwrap_or_default());
         blocks.for_each(|block_number| {
             self.load_block(block_number);
         });
@@ -185,7 +194,7 @@ mod tests {
     #[test]
     #[cfg(feature = "alloc")]
     fn test_ingest_mock_provider() {
-        use axos_primitives::B256;
+        use axos_primitives::{B256, U256, U64};
 
         let provider = build_mock_provider();
         let mut poll_queue = PollQueue::from(Box::new(provider) as Box<dyn Provider>);
@@ -195,11 +204,12 @@ mod tests {
         let mut expected_parent_hash = [0; 32];
         expected_parent_hash[31] = 1;
         let expected_block = BlockWithTransactions {
-            number: 2,
-            hash: B256::from(expected_hash),
+            number: Some(U64::from(2)),
+            hash: Some(B256::from(expected_hash)),
             parent_hash: B256::from(expected_parent_hash),
-            timestamp: 2,
+            timestamp: U256::from(2),
             transactions: Default::default(),
+            ..Default::default()
         };
         assert_eq!(block, Some(BlockUpdate::NewBlock(expected_block)));
     }
@@ -211,11 +221,12 @@ mod tests {
         let mut poll_queue = PollQueue::from(&mut provider as &mut dyn Provider);
         let block = poll_queue.try_ingest().unwrap();
         let expected_block = BlockWithTransactions {
-            number: 2,
+            number: Some(U64::from(2)),
             hash: [0; 32],
             parent_hash: [0; 32],
-            timestamp: 2,
+            timestamp: U256::from(2),
             transactions: Default::default(),
+            ..Default::default()
         };
         assert_eq!(block, Some(BlockUpdate::NewBlock(expected_block)));
     }

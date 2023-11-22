@@ -4,8 +4,10 @@ use serde::{Deserialize, Serialize};
 #[cfg(feature = "alloc")]
 use alloc::vec::Vec;
 
-use alloy_primitives::B256;
+use alloy_primitives::{Address, Bloom, Bytes, B256, U256, U64};
 pub use alloy_primitives::{BlockHash, BlockNumber};
+
+use crate::transactions::Transaction;
 
 /// Block Header Info
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -38,10 +40,10 @@ impl TryFrom<BlockWithTransactions> for BlockInfo {
 
     fn try_from(block: BlockWithTransactions) -> anyhow::Result<Self> {
         Ok(BlockInfo {
-            number: block.number,
-            hash: block.hash,
+            number: block.number.unwrap_or_default().to::<u64>(),
+            hash: block.hash.unwrap_or_default(),
             parent_hash: block.parent_hash,
-            timestamp: block.timestamp,
+            timestamp: block.timestamp.to::<u64>(),
         })
     }
 }
@@ -80,47 +82,39 @@ pub enum BlockKind {
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct BlockWithTransactions {
     /// The block hash
-    pub hash: B256,
-    /// The block number
-    pub number: u64,
+    pub hash: Option<B256>,
     /// The parent block hash
     pub parent_hash: B256,
+    /// The block author
+    pub author: Option<Address>,
+    /// The block state root hash
+    pub state_root: B256,
+    /// The block transactions root hash
+    pub transactions_root: B256,
+    /// The block receipts root hash
+    pub receipts_root: B256,
+    /// The block number
+    pub number: Option<U64>,
+    /// The amount of gas used in the block
+    pub gas_used: U256,
+    /// Block extra data
+    pub extra_data: Bytes,
+    /// The block logs bloom filter
+    pub logs_bloom: Option<Bloom>,
     /// The block timestamp
-    pub timestamp: u64,
+    pub timestamp: U256,
+    /// The block total difficulty
+    pub total_difficulty: Option<U256>,
+    /// The block seal fields
+    pub seal_fields: Vec<Bytes>,
     /// The block transactions
     #[cfg(feature = "alloc")]
     pub transactions: Vec<Transaction>,
     /// The block transactions
     #[cfg(not(feature = "alloc"))]
     pub transactions: &'static [Transaction],
-}
-
-/// A Transaction
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(Debug, Clone, PartialEq, Eq, Default)]
-pub struct Transaction {
-    /// The transaction hash
-    pub hash: B256,
-    /// The transaction index
-    pub index: u64,
-    /// The transaction sender
-    pub sender: B256,
-    /// The transaction nonce
-    pub nonce: u64,
-    /// The transaction gas price
-    pub gas_price: u64,
-    /// The transaction gas limit
-    pub gas_limit: u64,
-    /// The transaction to address
-    pub to: Option<B256>,
-    /// The transaction value
-    pub value: u64,
-    /// The transaction data
-    #[cfg(feature = "alloc")]
-    pub data: Vec<u8>,
-    /// The transaction data
-    #[cfg(not(feature = "alloc"))]
-    pub data: &'static [u8],
-    /// The transaction signature
-    pub signature: Option<B256>,
+    /// The block size
+    pub size: Option<U256>,
+    /// The block base fee per gas
+    pub base_fee_per_gas: Option<U256>,
 }

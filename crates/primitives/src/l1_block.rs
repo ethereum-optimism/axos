@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 #[cfg(feature = "alloc")]
 use alloc::vec::Vec;
 
-use alloy_primitives::fixed_bytes;
+use alloy_primitives::{fixed_bytes, Bytes};
 use alloy_primitives::{FixedBytes, B256, U256};
 
 /// The `setL1BlockValues` function selector.
@@ -94,6 +94,16 @@ impl TryFrom<&[u8]> for SetL1BlockValuesCall {
     type Error = anyhow::Error;
 
     fn try_from(value: &[u8]) -> anyhow::Result<Self> {
+        check_length!(value, 260, "SetL1BlockValuesCall");
+        check_selector!(value, SET_L1_BLOCK_VALUES_SELECTOR, "SetL1BlockValuesCall");
+        Ok(Self(value.to_vec()))
+    }
+}
+
+impl TryFrom<Bytes> for SetL1BlockValuesCall {
+    type Error = anyhow::Error;
+
+    fn try_from(value: Bytes) -> anyhow::Result<Self> {
         check_length!(value, 260, "SetL1BlockValuesCall");
         check_selector!(value, SET_L1_BLOCK_VALUES_SELECTOR, "SetL1BlockValuesCall");
         Ok(Self(value.to_vec()))
