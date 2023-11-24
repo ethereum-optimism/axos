@@ -7,7 +7,6 @@ title = "Axos Book"
 description = "Detailed documentation for the Axos derivation pipeline."
 
 [output.html]
-theme = "docs/theme"
 git-repository-url = "https://github.com/refcell/axos"
 default-theme = "ayu"
 no-section-label = true
