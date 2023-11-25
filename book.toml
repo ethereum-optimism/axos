@@ -4,7 +4,7 @@ language = "en"
 multilingual = false
 src = "docs"
 title = "Axos Book"
-description = "Detailed documentation for the Axos derivation pipeline."
+description = "Detailed documentation and specifications for the Axos derivation pipeline."
 
 [output.html]
 git-repository-url = "https://github.com/refcell/axos"
@@ -17,9 +17,6 @@ level = 1
 
 [build]
 build-dir = "target/book"
-
-[preprocessor.template]
-before = ["links"]
 
 [preprocessor.index]
 
