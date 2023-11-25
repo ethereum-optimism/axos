@@ -169,22 +169,52 @@ layer is Ethereum Mainnet.
 
 Note, these transactions contain one _or more_ frames.
 
-Phew, now that we've covered the core mechanics of the
-batch submission pipeline, the below image should nearly
-completely make sense.
+Phew, now that the core mechanics of the batch submission
+pipeline are covered, the next sections of this
+[batching](#batching) chapter will review batch submission
+through a visual representation and then dive into the
+wire format used in channel's streaming compression and
+batch/frame encoding.
+
+### Wire Format
 
 <img src="https://raw.githubusercontent.com/refcell/axos/main/docs/assets/batch-deriv-chain.svg" style="border-radius: 20px">
 
-// todo: detail image
+At the top of the diagram are L1 blocks with their
+corresponding block numbers. Notice time moves to the right
+throughout the diagram. Underneath the L1 blocks are the
+batcher transactions included in the block. The squiggles
+represent deposit transactions and the colored boxes are
+[**channel frames**][cf]. So `A` and `B` denote channels
+and `A0`, `A1`, `B0`, `B1`, `B2` are frames.
+
+Importantly, the overlapping of frames from different
+channels demonstrate that batcher transactions can be
+interleaved. Take OP Mainnet for example, with roughly
+6 L2 blocks per L1 block, there are 6 sequencer batches
+that need to be compressed into channels, the frames, and
+subsequently posted as calldata in batcher transactions.
+It's likely that multiple batcher transactions are confirmed
+per L1 block, even if there are multiple frames in a given
+transaction.
+
+Furthermore, frames do not need to be transmitted in order.
+
+// todo: discuss how epoch commitments provide a deterministic
+//       ordering for chain derivation
+
+
 
 ### Sequencing Window
 
 Earlier, we mentioned that transactions posted by the batcher must
 be posted within the sequencing window.
 
-### Wire Format
+
 
 <!-- Intradoc and Hyper Links -->
+
+[cf]: glossarylink
 
 [c]: https://github.com/ethereum-optimism/optimism/blob/develop/op-batcher/batcher/channel.go#L17
 [cm]: https://github.com/ethereum-optimism/optimism/blob/develop/op-batcher/batcher/channel_manager.go#L27
