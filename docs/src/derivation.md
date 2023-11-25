@@ -43,6 +43,14 @@ is defined that spans multiple L1 blocks.
 
 
 
+### Sequencing Window
+
+Earlier, we mentioned that transactions posted by the batcher must
+be posted within the sequencing window.
+
+
+
+
 <!-- Intradoc and Hyper Links -->
 
 [b]: ./batching.md
