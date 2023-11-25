@@ -200,27 +200,148 @@ transaction.
 
 Furthermore, frames do not need to be transmitted in order.
 
-// todo: discuss how epoch commitments provide a deterministic
-//       ordering for chain derivation
+Since channel B is seen first, it is decoded into the round
+boxes representing **sequencer batches** below first, then
+channel A is decoded. In practice, this need not be true.
+Blocks may be [_eagerly derived_](./derivation.md#eager-derivation)
+but this will be covered in the derivation spec.
 
+The bottom half of the image demonstrates the derivation
+pipeline counterpart to batch submission - deriving the
+cannonical L2 Blocks from the batch submitted, compressed
+calldata on the data availability layer.
 
+There are a few key conceptual parts required for derivation
+that are abstracted away from the batcher service. First,
+each L2 block contains a `L1BlockInfo` that contains info
+about the origin L1 block with the "sequence number" helping
+to distinguish between blocks with the same L1 block origin.
 
-### Sequencing Window
+The origin L1 Block info is written as the **epoch** number
+which corresponds to an L1 block number. The sequencer number
+is the position of the sequencer batch within the epoch.
 
-Earlier, we mentioned that transactions posted by the batcher must
-be posted within the sequencing window.
+### Batcher Transaction Format
 
+Transactions sent by the batcher are encoded in the
+following format `version_byte . rollup_payload`, where
+`.` is a concatenation.
 
+Currently `0` is the only version used where the
+`rollup_payload` is a sequential concatenation of
+frame data.
 
-<!-- Intradoc and Hyper Links -->
+Unknown versions or invalid decodings will cause the
+batch to fail to be included in the canonical rollup.
 
-[cf]: glossarylink
+#### Batcher Transaction Authentication
 
+The batcher service sends transactions with the
+`to` destination address set to the **batch inbox
+address**. Chain derivation checks all transactions
+that are sent to the batch inbox address.
+
+Since any actor can send a transaction to the
+batch inbox address, the `from` address must match
+the **batch sender address** specified in the
+[SystemConfig][sc] at the time of the L1 Block that
+the transaction is sent from.
+
+### Channel Frame Format
+
+```
+frame = channel_id . frame_number . frame_data_length . frame_data . is_last
+
+channel_id        = bytes16
+frame_number      = uint16
+frame_data_length = uint32
+frame_data        = bytes
+is_last           = bool
+```
+
+All data in a frame is fixed-size, except the `frame_data`.
+
+The fixed overhead is `16` + `2` + `4` + `1` = `23` bytes.
+
+Fixed-size frame metadata avoids a circular dependency with the
+target total data length, to simplify packing of frames with
+varying content length.
+
+`channel_id`: A unique channel identifier.
+`frame_number`: The position of the frame inside the channel.
+`frame_data_length`: The number of `frame_data` bytes. The maximum
+is `1_000_000` bytes.
+`frame_data`: Concatenated frame data bytes.
+`is_last`: Single byte where `1` indicates this frame is the last in
+the channel, and `0` indicating otherwise.
+
+### Channel Encoding
+
+```
+rlp_batches = []
+for batch in batches:
+    rlp_batches.append(batch)
+channel_encoding = compress(rlp_batches)
+```
+Where:
+`batches`: Sequence of [byte-encoded batches](#batch-encoding).
+`rlp_batches`: Concatenation of RLP-encoded batches.
+`compress`: Compression function. ([RFC-1950][1950] ZLIB function)
+`channel_encoding`: Compressed version of `rlp_batches`.
+
+Decoding the compressed channel data is limited to `MAX_RLP_BYTES_PER_CHANNEL`.
+This is currently set to `10_000_000` bytes.
+
+Decoded data exceeding the `MAX_RLP_BYTES_PER_CHANNEL` is truncated
+and does not break the channel decoding.
+
+Using the compression scheme from [RFC-1950][1950], channels
+may be decoded in _streaming_ fashion where not all batches are
+known in advance. On the batcher side, this allows batcher transactions
+to be submitted without knowing how many batches, and frames, the
+channel will contain.
+
+### Batch Format
+
+The sequencer batch is a list of the L2 block transactions.
+
+This is encoded as `batch_version . content`.
+
+Batcher versions and corresponding `content`:
+`0`: `rlp_encode([parent_hash, epoch_number, epoch_hash, timestamp, transaction_list])`
+
+Where:
+`parent_hash`: The previous L2 block hash.
+`epoch_number`: L1 block number for the [sequencing epoch][se].
+`epoch_hash`: L1 block hash for the [sequencing epoch][se].
+`timestamp`: The timestamp of the **L2 block**.
+`transaction_list`: rlp-encoded list of [eip-2718][2718] transactions.
+
+The `rlp_encode` function follows the [RLP Format][rlp].
+
+Batches with unknown batch versions are invalid and must be ignored
+in the derivation pipeline. If batches have malformed contents, they
+are also ignored.
+
+`epoch_number` and `timestamp` values must follow the contraints
+outlined in the [derivation][d] specs, or the batch is considered
+invalid.
+
+<!-- Intradoc refs -->
+
+[d]: ./derivation.md
+[sc]: ./glossary.md#system-config 
+[cf]: ./glossary.md#channel-frames 
+
+<!-- Hyperlinks -->
+
+[2718]: https://eips.ethereum.org/EIPS/eip-2718
+[rlp]: https://ethereum.org/en/developers/docs/data-structures-and-encoding/rlp
+[1950]: https://www.rfc-editor.org/rfc/rfc1950.html
 [c]: https://github.com/ethereum-optimism/optimism/blob/develop/op-batcher/batcher/channel.go#L17
 [cm]: https://github.com/ethereum-optimism/optimism/blob/develop/op-batcher/batcher/channel_manager.go#L27
 [ee]: https://help.optimism.io/hc/en-us/articles/8004922894491-What-is-the-difference-between-EVM-equivalence-and-Ethereum-equivalence
 [bu]: https://blog.oplabs.co/reproduce-bedrock-migration/#:~:text=On%20June%206%2C%202023%2C%20OP,to%20be%20verifiable%20and%20reproducible.
-[d]: ./derivation.md
 [s]: https://medium.com/@richardchen_81235/intro-to-shared-sequencing-1622d1fd51c9
 [b]: https://github.com/ethereum-optimism/optimism/tree/develop/op-batcher
 [brsd]: https://github.com/ethereum-optimism/optimism/blob/develop/specs/batcher.md?plain=1
