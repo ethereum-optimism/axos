@@ -20,17 +20,16 @@ bedrock is the first official release of the OP Stack.
 _Aside: visit [optimism.io][opio] for a detailed walkthrough of
 the differences between OP Mainnet pre and post-bedrock._
 
-
 ## Derivation
 
 The derivation pipeline is one of the key components of a [rollup][rollup].
 
-At a high level, the derivation pipeline reads blocks from the consensus layer
-(for example Ethereum Mainnet, or "L1"), and outputs canonical rollup blocks
-(aka "L2" blocks). Each L1 block maps to a set of L2 blocks, called the
-[sequencing epoch][se]. Since this set of L2 blocks are mapped to a single
-epoch, the associated L1 block number is used as an identifier called the
-[epoch number][en].
+At a high level, the derivation pipeline reads blocks from the data
+availability layer (for example Ethereum Mainnet, or "L1"), and outputs
+canonical rollup blocks (aka "L2" blocks). Each L1 block maps to a set
+of L2 blocks, called the [sequencing epoch][se]. Since this set of L2
+blocks are mapped to a single epoch, the associated L1 block number
+is used as an identifier called the [epoch number][en].
 
 
 Since the size of transaction batches cannot be compressed entirely to fit
@@ -43,6 +42,10 @@ is defined that spans multiple L1 blocks.
 
 
 
+<img src="https://raw.githubusercontent.com/refcell/axos/main/docs/assets/derivation.png" style="border-radius: 20px">
+
+
+
 ### Sequencing Window
 
 Earlier, we mentioned that transactions posted by the batcher must
@@ -51,7 +54,10 @@ be posted within the sequencing window.
 
 
 
-<!-- Intradoc and Hyper Links -->
+<!-- Intradoc refs -->
 
 [b]: ./batching.md
+
+<!-- Hyperlinks -->
+
 [opio]: https://community.optimism.io/docs/developers/bedrock/explainer/#
