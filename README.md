@@ -23,6 +23,7 @@
 [Docs]: https://img.shields.io/docsrs/axos.svg?color=319e8c&label=docs.rs
 [no_std]: https://img.shields.io/badge/no__std-tested-green.svg
 [nostd]: https://docs.rust-embedded.org/book/intro/no-std.html#summary
+[refcell]: https://axos.refcell.org
 
 **Portable no-std Derivation Pipeline engineered in pure Rust** https://github.com/refcell/axos/labels/alpha
 
@@ -32,6 +33,7 @@
 | [Usage](#usage)
 | [Development](#developing)
 | [Crate Docs][crates.io]
+| [Specs][refcell]
 | [Reference][Docs-rs]
 | [Contributing](#contributing)
 | [License](#license)
@@ -73,16 +75,17 @@ in mock provider mode using the `axt` target: `just axt`.
 
 ## Contributing
 
-Contributions to `axos` are very welcome and highly appreciated. When
-opening a pull request or issue, please provide concise and descriptive
-detail such that anyone with little context reading your issue or
-reviewing your pull request can easily understand and provide meaningful
-feedback.
+Contributions to `axos` are welcome and highly appreciated.
+
+When opening a pull request or issue, please provide concise and
+descriptive detail such that anyone with little context reading your
+issue or reviewing your pull request can easily understand and
+provide meaningful feedback.
 
 Before opening a pull request, make sure all tests pass. Execute `just`
-to run the default Justfile target, formating, linting, and testing
+to run the default Justfile target, which formats, lints, and tests
 all rust files in the cargo workspace. If the `just` command succeeds
-locally, ci should pass in your pull request.
+locally, ci will likely pass in your pull request.
 
 ## Troubleshooting
 
@@ -92,4 +95,4 @@ if no relevant issue already exists.
 
 ## License
 
-Fully licensed under the [MIT License](LICENSE.md). Open source forever.
+Fully licensed under the [MIT License](LICENSE.md).
