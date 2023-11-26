@@ -203,8 +203,8 @@ Furthermore, frames do not need to be transmitted in order.
 Since channel B is seen first, it is decoded into the round
 boxes representing **sequencer batches** below first, then
 channel A is decoded. In practice, this need not be true.
-Blocks may be [_eagerly derived_](./derivation.md#eager-derivation)
-but this will be covered in the derivation spec.
+Blocks may be [_eagerly derived_][ed] but this will be
+covered in the derivation spec.
 
 The bottom half of the image demonstrates the derivation
 pipeline counterpart to batch submission - deriving the
@@ -331,7 +331,8 @@ invalid.
 
 [d]: ./derivation.md
 [sc]: ./glossary.md#system-config 
-[cf]: ./glossary.md#channel-frames 
+[cf]: ./glossary.md#channel-frames
+[ed]: ./derivation.md#eager-derivation
 
 <!-- Hyperlinks -->
 
