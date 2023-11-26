@@ -41,9 +41,6 @@ which are derived from batch transactions within those L1 blocks.
 Ignoring channels and frames for a moment, derivation is quite simple at
 a high level. A basic illustration is presented below.
 
-<!--
-<img src="https://raw.githubusercontent.com/refcell/axos/main/docs/assets/basic-derivation.png" style="border-radius: 20px">
--->
 <img src="../assets/basic-derivation.png" style="border-radius: 20px">
 
 In the presented sequencing window, the first L1 block is number `101`.
@@ -55,7 +52,7 @@ derived from the set of L1 blocks, "sequencing window".
 
 ### Frames, Channels, and Batches 
 
-<img src="https://raw.githubusercontent.com/refcell/axos/main/docs/assets/derivation.png" style="border-radius: 20px">
+<img src="../assets/derivation.png" style="border-radius: 20px">
 
 
 

@@ -37,7 +37,7 @@ sequencer role is illustrated in the below wireframe. By the
 end of this chapter, you will understand how the different
 parts of this wireframe interact in detail.
 
-<img src="https://raw.githubusercontent.com/refcell/axos/main/docs/assets/sequencer.png" style="border-radius: 20px">
+<img src="../assets/sequencer.png" style="border-radius: 20px">
 
 ### Batcher
 
@@ -178,7 +178,7 @@ batch/frame encoding.
 
 ### Wire Format
 
-<img src="https://raw.githubusercontent.com/refcell/axos/main/docs/assets/batch-deriv-chain.svg" style="border-radius: 20px">
+<img src="../assets/batch-deriv-chain.svg" style="border-radius: 20px">
 
 At the top of the diagram are L1 blocks with their
 corresponding block numbers. Notice time moves to the right
