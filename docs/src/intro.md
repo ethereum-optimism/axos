@@ -50,7 +50,7 @@ submission and chain derivation, aiming to be up-to-date with the
 [rsd]: https://github.com/ethereum-optimism/optimism/blob/develop/specs/derivation.md
 [rollup]: https://community.optimism.io/docs/protocol/2-rollup-protocol/
 
-[axos]: ../../crates/axos
+[axos]: https://crates.io/crates/axos
 [revm]: https://github.com/bluealloy/revm
 
 [tg-url]: https://t.me/+XR8_p3qjzoFiMjEx
