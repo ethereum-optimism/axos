@@ -9,23 +9,23 @@
 [![no_std supported][no_std]][nostd]
 [![rustc 1.72.1+]][Rust 1.72.1]
 
-[CI Build Status]: https://img.shields.io/github/actions/workflow/status/refcell/axos/ci.yml?branch=main&label=build
-[Tag Build Status]: https://img.shields.io/github/actions/workflow/status/refcell/axos/tag.yml?branch=main&label=tag
-[Release]: https://img.shields.io/github/actions/workflow/status/refcell/axos/release.yml?branch=main&label=release
-[actions]: https://github.com/refcell/axos/actions?query=branch%3Amain
+[CI Build Status]: https://img.shields.io/github/actions/workflow/status/ethereum-optimism/axos/ci.yml?branch=main&label=build
+[Tag Build Status]: https://img.shields.io/github/actions/workflow/status/ethereum-optimism/axos/tag.yml?branch=main&label=tag
+[Release]: https://img.shields.io/github/actions/workflow/status/ethereum-optimism/axos/release.yml?branch=main&label=release
+[actions]: https://github.com/ethereum-optimism/axos/actions?query=branch%3Amain
 [Latest Version]: https://img.shields.io/crates/v/axos.svg
 [crates.io]: https://crates.io/crates/axos
 [rustc 1.72.1+]: https://img.shields.io/badge/rustc_1.72.1+-lightgray.svg
 [Rust 1.72.1]: https://blog.rust-lang.org/2023/09/19/Rust-1.72.1.html
 [License]: https://img.shields.io/badge/license-MIT-7795AF.svg
-[mit-license]: https://github.com/refcell/axos/blob/main/LICENSE.md
+[mit-license]: https://github.com/ethereum-optimism/axos/blob/main/LICENSE.md
 [Docs-rs]: https://docs.rs/axos/
 [Docs]: https://img.shields.io/docsrs/axos.svg?color=319e8c&label=docs.rs
 [no_std]: https://img.shields.io/badge/no__std-tested-green.svg
 [nostd]: https://docs.rust-embedded.org/book/intro/no-std.html#summary
 [refcell]: https://axos.refcell.org
 
-**Portable no-std Derivation Pipeline engineered in pure Rust** https://github.com/refcell/axos/labels/alpha
+**Portable no-std Derivation Pipeline engineered in pure Rust** https://github.com/ethereum-optimism/axos/labels/alpha
 
 ![](./etc/banner.png)
 
@@ -90,7 +90,7 @@ locally, ci will likely pass in your pull request.
 ## Troubleshooting
 
 Please check existing issues for similar bugs or
-[open an issue](https://github.com/refcell/axos/issues/new)
+[open an issue](https://github.com/ethereum-optimism/axos/issues/new)
 if no relevant issue already exists.
 
 ## License
